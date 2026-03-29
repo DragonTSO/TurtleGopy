@@ -7,8 +7,10 @@ import java.util.List;
 import com.turtle.turtlegopy.core.TurtleGopyCore;
 import com.turtle.turtlegopy.gui.AdminBugReportGUI;
 import com.turtle.turtlegopy.gui.AdminGUI;
+import com.turtle.turtlegopy.gui.AdminSupportGUI;
 import com.turtle.turtlegopy.gui.PlayerBugReportGUI;
 import com.turtle.turtlegopy.gui.PlayerGUI;
+import com.turtle.turtlegopy.gui.PlayerSupportGUI;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,8 +29,9 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         boolean isBaoLoi = label.equalsIgnoreCase("baoloi");
+        boolean isHoTro = label.equalsIgnoreCase("hotro");
 
-        // No args: /gopy → feedback GUI, /baoloi → bug report GUI
+        // No args: /gopy → feedback GUI, /baoloi → bug report GUI, /hotro → support GUI
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage(core.getMessage("player-only"));
@@ -37,6 +40,8 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
 
             if (isBaoLoi) {
                 PlayerBugReportGUI.open(core, player, 0);
+            } else if (isHoTro) {
+                PlayerSupportGUI.open(core, player, 0);
             } else {
                 PlayerGUI.open(core, player, 0);
             }
@@ -57,15 +62,15 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                // /baoloi check → admin bug report, /gopy check → admin feedback
+                // /baoloi check → admin bug report, /hotro check → admin support, /gopy check → admin feedback
                 if (isBaoLoi) {
                     AdminBugReportGUI.open(core, player, 0, null);
+                } else if (isHoTro) {
+                    AdminSupportGUI.open(core, player, 0, null);
                 } else {
                     AdminGUI.open(core, player, 0, null);
                 }
             }
-
-
 
             case "checkbaoloi" -> {
                 // /gopy checkbaoloi → admin bug report GUI
@@ -82,6 +87,21 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
                 AdminBugReportGUI.open(core, player, 0, null);
             }
 
+            case "checkhotro" -> {
+                // /gopy checkhotro → admin support GUI
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(core.getMessage("player-only"));
+                    return true;
+                }
+
+                if (!player.hasPermission("turtlegopy.admin")) {
+                    player.sendMessage(core.getMessage("no-permission"));
+                    return true;
+                }
+
+                AdminSupportGUI.open(core, player, 0, null);
+            }
+
             case "reload" -> {
                 if (!sender.hasPermission("turtlegopy.admin")) {
                     sender.sendMessage(core.getMessage("no-permission"));
@@ -93,7 +113,7 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
             }
 
             default -> {
-                // Quick create: /gopy <content> or /baoloi <content>
+                // Quick create: /gopy <content>, /baoloi <content>, /hotro <content>
                 if (!(sender instanceof Player player)) {
                     sender.sendMessage(core.getMessage("player-only"));
                     return true;
@@ -105,6 +125,10 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
                     var report = core.getBugReportManager().createReport(player, content);
                     player.sendMessage(core.getMessage("bugreport-created")
                             .replace("{id}", report.getId().toString().substring(0, 8)));
+                } else if (isHoTro) {
+                    var ticket = core.getSupportTicketManager().createTicket(player, content);
+                    player.sendMessage(core.getMessage("support-created")
+                            .replace("{id}", ticket.getId().toString().substring(0, 8)));
                 } else {
                     var feedback = core.getFeedbackManager().createFeedback(player, content);
                     player.sendMessage(core.getMessage("feedback-created")

@@ -45,6 +45,22 @@ public class GUIListener implements Listener {
 
         if (event.getInventory().getHolder() instanceof AdminBugManageGUI) {
             AdminBugManageGUI.handleClick(core, event);
+            return;
+        }
+
+        // Support Ticket GUIs
+        if (event.getInventory().getHolder() instanceof PlayerSupportGUI) {
+            PlayerSupportGUI.handleClick(core, event);
+            return;
+        }
+
+        if (event.getInventory().getHolder() instanceof AdminSupportGUI) {
+            AdminSupportGUI.handleClick(core, event);
+            return;
+        }
+
+        if (event.getInventory().getHolder() instanceof AdminSupportManageGUI) {
+            AdminSupportManageGUI.handleClick(core, event);
         }
     }
 }

@@ -38,6 +38,31 @@ admin-new-bugreport: "&c🐛 Có báo lỗi mới từ &6{player}&c: &f{content}
 admin-bugreport-deleted: "&cĐã xóa báo lỗi &e{id}"
 
 # ============================================
+# Hỗ Trợ - Tin nhắn cho người chơi
+# ============================================
+support-created: "&aBạn đã gửi phiếu hỗ trợ thành công! ID: &e{id}"
+support-input-prompt: "&eHãy mô tả vấn đề cần hỗ trợ vào chat. Gõ &c'cancel' &eđể hủy. &7(Hết hạn sau 60s)"
+support-input-cancelled: "&cBạn đã hủy phiếu hỗ trợ."
+support-input-timeout: "&cHết thời gian nhập phiếu hỗ trợ."
+support-status-changed: "&aPhiếu hỗ trợ của bạn đã được cập nhật: &e{status}"
+support-reward: "&a🎁 Bạn đã nhận thưởng!"
+support-deleted: "&cPhiếu hỗ trợ đã bị xóa."
+support-empty: "&eBạn chưa có phiếu hỗ trợ nào."
+
+# Hỗ Trợ - Tin nhắn cho admin
+admin-support-status-updated: "&aĐã cập nhật trạng thái hỗ trợ thành &e{status}"
+admin-new-support: "&3🎫 Có phiếu hỗ trợ mới từ &6{player}&3: &f{content}"
+admin-support-deleted: "&cĐã xóa phiếu hỗ trợ &e{id}"
+
+# ============================================
+# Mending Repair - Sửa đồ bằng XP
+# ============================================
+mending-not-damaged: "&aĐồ của bạn không bị hư hại!"
+mending-no-xp: "&cBạn không có đủ kinh nghiệm để sửa đồ!"
+mending-fully-repaired: "&a✨ Đã sửa hoàn toàn! Tốn &e{xp} XP &a(&e{durability} durability&a)"
+mending-partially-repaired: "&e🔧 Đã sửa một phần! Tốn &6{xp} XP &e(&6{durability} durability&e)"
+
+# ============================================
 # Tin nhắn chung
 # ============================================
 no-permission: "&cBạn không có quyền thực hiện hành động này."

@@ -2,6 +2,18 @@
 # Plugin version: 1.0.0
 
 # ============================================
+# Mending Repair - Sửa đồ bằng kinh nghiệm
+# ============================================
+# Shift + Chuột phải khi cầm đồ có Mending để sửa bằng XP
+mending-repair:
+  # Bật/tắt tính năng
+  enabled: true
+  # Số durability phục hồi mỗi 1 XP (mặc định Minecraft: 2)
+  durability-per-xp: 2
+  # Permission cần có (để trống = ai cũng dùng được)
+  permission: ""
+
+# ============================================
 # Storage Settings
 # ============================================
 storage:
@@ -51,6 +63,16 @@ bugreport-rewards:
     - "broadcast {player} đã nhận thưởng 1 key Amethyst vì báo lỗi hữu ích!"
 
 # ============================================
+# Reward Settings - Hỗ Trợ
+# ============================================
+# Phần thưởng khi phiếu hỗ trợ được giải quyết
+# Placeholders: {player} = tên người chơi, {ticket_id} = ID phiếu hỗ trợ
+support-rewards:
+  enabled: false
+  commands:
+    - "crates give {player} amethyst 1"
+
+# ============================================
 # GUI Settings
 # ============================================
 gui:
@@ -74,6 +96,16 @@ gui:
     rows: 6
     items-per-page: 28
 
+  # GUI Hỗ Trợ
+  support-player:
+    title: "&3&l🎫 Phiếu Hỗ Trợ Của Bạn"
+    rows: 6
+    items-per-page: 28
+  support-admin:
+    title: "&3&l🎫 Quản Lý Hỗ Trợ"
+    rows: 6
+    items-per-page: 28
+
 # ============================================
 # Notification Settings
 # ============================================
@@ -84,6 +116,8 @@ notification:
   on-new-feedback: true
   # Thông báo cho admin khi có báo lỗi mới
   on-new-bugreport: true
+  # Thông báo cho admin khi có phiếu hỗ trợ mới
+  on-new-support: true
 
 # ============================================
 # Auto Broadcast Settings
@@ -112,6 +146,10 @@ broadcast:
           - "&8&m─────────────────────────────────"
         3:
           - "&8&m─────────────────────────────────"
+          - "&3&l🎫 HỖ TRỢ &8- &fCần giúp đỡ? Gõ &e/hotro &fđể gửi yêu cầu!"
+          - "&8&m─────────────────────────────────"
+        4:
+          - "&8&m─────────────────────────────────"
           - "&a&l📢 THÔNG BÁO &8- &fChào mừng bạn đến với server!"
           - "&8&m─────────────────────────────────"
 
@@ -130,3 +168,5 @@ broadcast:
           - "&8[&b&lTIP&8] &7Phát hiện lỗi? Dùng &e/baoloi &7để báo cho admin!"
         4:
           - "&8[&b&lTIP&8] &7Theo dõi trạng thái góp ý bằng &e/gopy&7!"
+        5:
+          - "&8[&b&lTIP&8] &7Cần hỗ trợ? Gõ &e/hotro &7để tạo phiếu hỗ trợ!"

@@ -2,16 +2,21 @@ package com.turtle.turtlegopy.core;
 
 import com.turtle.turtlegopy.api.storage.BugReportStorageProvider;
 import com.turtle.turtlegopy.api.storage.StorageProvider;
+import com.turtle.turtlegopy.api.storage.SupportTicketStorageProvider;
 import com.turtle.turtlegopy.command.GopyCommand;
 import com.turtle.turtlegopy.gui.GUIListener;
 import com.turtle.turtlegopy.listener.ChatInputListener;
+import com.turtle.turtlegopy.listener.MendingRepairListener;
 import com.turtle.turtlegopy.manager.BroadcastManager;
 import com.turtle.turtlegopy.manager.BugReportManager;
 import com.turtle.turtlegopy.manager.FeedbackManager;
+import com.turtle.turtlegopy.manager.SupportTicketManager;
 import com.turtle.turtlegopy.storage.DatabaseBugReportStorageProvider;
 import com.turtle.turtlegopy.storage.DatabaseStorageProvider;
+import com.turtle.turtlegopy.storage.DatabaseSupportTicketStorageProvider;
 import com.turtle.turtlegopy.storage.YamlBugReportStorageProvider;
 import com.turtle.turtlegopy.storage.YamlStorageProvider;
+import com.turtle.turtlegopy.storage.YamlSupportTicketStorageProvider;
 
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,8 +36,10 @@ public class TurtleGopyCore {
     private final JavaPlugin plugin;
     private StorageProvider storageProvider;
     private BugReportStorageProvider bugReportStorageProvider;
+    private SupportTicketStorageProvider supportTicketStorageProvider;
     private FeedbackManager feedbackManager;
     private BugReportManager bugReportManager;
+    private SupportTicketManager supportTicketManager;
     private BroadcastManager broadcastManager;
     private ChatInputListener chatInputListener;
     private FileConfiguration messagesConfig;
@@ -50,11 +57,13 @@ public class TurtleGopyCore {
 
         feedbackManager = new FeedbackManager(this);
         bugReportManager = new BugReportManager(this);
+        supportTicketManager = new SupportTicketManager(this);
         broadcastManager = new BroadcastManager(this);
         chatInputListener = new ChatInputListener(this);
 
         plugin.getServer().getPluginManager().registerEvents(chatInputListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(new GUIListener(this), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new MendingRepairListener(this), plugin);
 
         // Register /gopy and /baoloi commands (same executor, detects label)
         GopyCommand gopyCommand = new GopyCommand(this);
@@ -69,6 +78,12 @@ public class TurtleGopyCore {
         if (baoloiCmd != null) {
             baoloiCmd.setExecutor(gopyCommand);
             baoloiCmd.setTabCompleter(gopyCommand);
+        }
+
+        PluginCommand hotroCmd = plugin.getCommand("hotro");
+        if (hotroCmd != null) {
+            hotroCmd.setExecutor(gopyCommand);
+            hotroCmd.setTabCompleter(gopyCommand);
         }
 
         // Start broadcast manager
@@ -90,6 +105,9 @@ public class TurtleGopyCore {
         if (bugReportStorageProvider != null) {
             bugReportStorageProvider.shutdown();
         }
+        if (supportTicketStorageProvider != null) {
+            supportTicketStorageProvider.shutdown();
+        }
         plugin.getLogger().info("TurtleGopy đã bị vô hiệu hóa!");
     }
 
@@ -103,10 +121,14 @@ public class TurtleGopyCore {
         if (bugReportStorageProvider != null) {
             bugReportStorageProvider.shutdown();
         }
+        if (supportTicketStorageProvider != null) {
+            supportTicketStorageProvider.shutdown();
+        }
         initStorage();
 
         feedbackManager = new FeedbackManager(this);
         bugReportManager = new BugReportManager(this);
+        supportTicketManager = new SupportTicketManager(this);
         broadcastManager.reload();
     }
 
@@ -120,12 +142,18 @@ public class TurtleGopyCore {
 
             bugReportStorageProvider = new DatabaseBugReportStorageProvider(this, dbProvider.getDataSource());
             bugReportStorageProvider.init();
+
+            supportTicketStorageProvider = new DatabaseSupportTicketStorageProvider(this, dbProvider.getDataSource());
+            supportTicketStorageProvider.init();
         } else {
             storageProvider = new YamlStorageProvider(this);
             storageProvider.init();
 
             bugReportStorageProvider = new YamlBugReportStorageProvider(this);
             bugReportStorageProvider.init();
+
+            supportTicketStorageProvider = new YamlSupportTicketStorageProvider(this);
+            supportTicketStorageProvider.init();
         }
 
         plugin.getLogger().info("Đã khởi tạo storage: " + storageType);

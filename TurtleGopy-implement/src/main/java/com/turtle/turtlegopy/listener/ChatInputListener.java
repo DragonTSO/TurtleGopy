@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.turtle.turtlegopy.api.model.BugReport;
 import com.turtle.turtlegopy.api.model.Feedback;
+import com.turtle.turtlegopy.api.model.SupportTicket;
 import com.turtle.turtlegopy.core.SchedulerUtil;
 import com.turtle.turtlegopy.core.TurtleGopyCore;
 
@@ -20,6 +21,7 @@ public class ChatInputListener implements Listener {
 
     private static final int MODE_FEEDBACK = 1;
     private static final int MODE_BUGREPORT = 2;
+    private static final int MODE_SUPPORT = 3;
 
     private final TurtleGopyCore core;
     private final Map<UUID, Integer> pendingInput = new ConcurrentHashMap<>();
@@ -35,6 +37,10 @@ public class ChatInputListener implements Listener {
 
     public void startBugReportInput(Player player) {
         startInputMode(player, MODE_BUGREPORT);
+    }
+
+    public void startSupportInput(Player player) {
+        startInputMode(player, MODE_SUPPORT);
     }
 
     private void startInputMode(Player player, int mode) {
@@ -53,9 +59,14 @@ public class ChatInputListener implements Listener {
                         if (pendingInput.remove(uuid) != null) {
                             Player p = core.getPlugin().getServer().getPlayer(uuid);
                             if (p != null && p.isOnline()) {
-                                String msgKey = (mode == MODE_BUGREPORT)
-                                        ? "bugreport-input-timeout"
-                                        : "feedback-input-timeout";
+                                String msgKey;
+                                if (mode == MODE_BUGREPORT) {
+                                    msgKey = "bugreport-input-timeout";
+                                } else if (mode == MODE_SUPPORT) {
+                                    msgKey = "support-input-timeout";
+                                } else {
+                                    msgKey = "feedback-input-timeout";
+                                }
                                 p.sendMessage(core.getMessage(msgKey));
                             }
                         }
@@ -67,9 +78,14 @@ public class ChatInputListener implements Listener {
                 if (pendingInput.remove(uuid) != null) {
                     Player p = core.getPlugin().getServer().getPlayer(uuid);
                     if (p != null && p.isOnline()) {
-                        String msgKey = (mode == MODE_BUGREPORT)
-                                ? "bugreport-input-timeout"
-                                : "feedback-input-timeout";
+                        String msgKey;
+                        if (mode == MODE_BUGREPORT) {
+                            msgKey = "bugreport-input-timeout";
+                        } else if (mode == MODE_SUPPORT) {
+                            msgKey = "support-input-timeout";
+                        } else {
+                            msgKey = "feedback-input-timeout";
+                        }
                         p.sendMessage(core.getMessage(msgKey));
                     }
                 }
@@ -124,9 +140,14 @@ public class ChatInputListener implements Listener {
         pendingInput.remove(uuid);
 
         if (message.equalsIgnoreCase(cancelWord)) {
-            String cancelKey = (mode == MODE_BUGREPORT)
-                    ? "bugreport-input-cancelled"
-                    : "feedback-input-cancelled";
+            String cancelKey;
+            if (mode == MODE_BUGREPORT) {
+                cancelKey = "bugreport-input-cancelled";
+            } else if (mode == MODE_SUPPORT) {
+                cancelKey = "support-input-cancelled";
+            } else {
+                cancelKey = "feedback-input-cancelled";
+            }
             // Use entity scheduler for Folia compatibility
             SchedulerUtil.runEntityTask(core.getPlugin(), player, () ->
                     player.sendMessage(core.getMessage(cancelKey)));
@@ -139,6 +160,11 @@ public class ChatInputListener implements Listener {
                 BugReport report = core.getBugReportManager().createReport(player, message);
                 String successMessage = core.getMessage("bugreport-created")
                         .replace("{id}", report.getId().toString().substring(0, 8));
+                player.sendMessage(successMessage);
+            } else if (mode == MODE_SUPPORT) {
+                SupportTicket ticket = core.getSupportTicketManager().createTicket(player, message);
+                String successMessage = core.getMessage("support-created")
+                        .replace("{id}", ticket.getId().toString().substring(0, 8));
                 player.sendMessage(successMessage);
             } else {
                 Feedback feedback = core.getFeedbackManager().createFeedback(player, message);

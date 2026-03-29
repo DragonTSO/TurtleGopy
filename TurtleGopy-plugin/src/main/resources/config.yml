@@ -1,0 +1,132 @@
+# TurtleGopy Configuration
+# Plugin version: 1.0.0
+
+# ============================================
+# Storage Settings
+# ============================================
+storage:
+  # Type: YAML or DATABASE
+  type: YAML
+
+  # Database settings (chỉ khi type: DATABASE)
+  database:
+    # MYSQL hoặc SQLITE
+    type: SQLITE
+    host: localhost
+    port: 3306
+    name: turtlegopy
+    username: root
+    password: ""
+    table-prefix: "turtlegopy_"
+
+# ============================================
+# Chat Input Settings
+# ============================================
+chat-input:
+  # Thời gian chờ nhập góp ý / báo lỗi (giây)
+  timeout: 60
+  # Từ để hủy nhập
+  cancel-word: "cancel"
+
+# ============================================
+# Reward Settings - Góp Ý
+# ============================================
+# Phần thưởng khi góp ý được chấp nhận
+# Placeholders: {player} = tên người chơi, {feedback_id} = ID góp ý
+rewards:
+  enabled: true
+  commands:
+    - "crates give {player} amethyst 1"
+    - "broadcast {player} đã nhận thưởng 1 key Amethyst vì góp ý được chấp nhận!"
+
+# ============================================
+# Reward Settings - Báo Lỗi
+# ============================================
+# Phần thưởng khi báo lỗi được xác nhận đã sửa
+# Placeholders: {player} = tên người chơi, {report_id} = ID báo lỗi
+bugreport-rewards:
+  enabled: true
+  commands:
+    - "crates give {player} amethyst 1"
+    - "broadcast {player} đã nhận thưởng 1 key Amethyst vì báo lỗi hữu ích!"
+
+# ============================================
+# GUI Settings
+# ============================================
+gui:
+  # GUI Góp Ý
+  player:
+    title: "&6&l✉ Góp Ý Của Bạn"
+    rows: 6
+    items-per-page: 28
+  admin:
+    title: "&c&l⚙ Quản Lý Góp Ý"
+    rows: 6
+    items-per-page: 28
+
+  # GUI Báo Lỗi
+  bugreport-player:
+    title: "&c&l🐛 Báo Lỗi Của Bạn"
+    rows: 6
+    items-per-page: 28
+  bugreport-admin:
+    title: "&4&l🐛 Quản Lý Báo Lỗi"
+    rows: 6
+    items-per-page: 28
+
+# ============================================
+# Notification Settings
+# ============================================
+notification:
+  # Thông báo cho người chơi khi trạng thái thay đổi
+  on-status-change: true
+  # Thông báo cho admin khi có góp ý mới
+  on-new-feedback: true
+  # Thông báo cho admin khi có báo lỗi mới
+  on-new-bugreport: true
+
+# ============================================
+# Auto Broadcast Settings
+# ============================================
+# Tự động gửi thông báo lên chat theo thời gian
+# Mỗi cụm (1, 2, 3...) sẽ được gửi CẢ CỤM cùng lúc
+# Sau đó chuyển sang cụm tiếp theo
+broadcast:
+  enabled: true
+  groups:
+    # Nhóm thông báo chung
+    thongbao-chung:
+      enabled: true
+      interval: 1
+      random: false
+      permission: ""
+      # Mỗi số là 1 cụm - gửi cả cụm cùng lúc
+      messages:
+        1:
+          - "&8&m─────────────────────────────────"
+          - "&6&l✉ GÓP Ý &8- &fBạn có ý tưởng? Gõ &e/gopy &fđể gửi góp ý!"
+          - "&8&m─────────────────────────────────"
+        2:
+          - "&8&m─────────────────────────────────"
+          - "&c&l🐛 BÁO LỖI &8- &fPhát hiện lỗi? Gõ &e/baoloi &fđể báo ngay!"
+          - "&8&m─────────────────────────────────"
+        3:
+          - "&8&m─────────────────────────────────"
+          - "&a&l📢 THÔNG BÁO &8- &fChào mừng bạn đến với server!"
+          - "&8&m─────────────────────────────────"
+
+    # Nhóm tips - ngẫu nhiên
+    tips:
+      enabled: true
+      interval: 1
+      random: true
+      permission: ""
+      messages:
+        1:
+          - "&8[&b&lTIP&8] &7Sử dụng &e/gopy &7để đóng góp ý kiến cho server!"
+        2:
+          - "&8[&b&lTIP&8] &7Góp ý được chấp nhận sẽ nhận &e&lKEY &7làm thưởng!"
+        3:
+          - "&8[&b&lTIP&8] &7Phát hiện lỗi? Dùng &e/baoloi &7để báo cho admin!"
+        4:
+          - "&8[&b&lTIP&8] &7Theo dõi trạng thái góp ý bằng &e/gopy&7!"

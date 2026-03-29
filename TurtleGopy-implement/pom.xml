@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.turtle</groupId>
+        <artifactId>turtlegopy-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>turtlegopy-implement</artifactId>
+    <name>TurtleGopy-Implement</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.turtle</groupId>
+            <artifactId>turtlegopy-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.turtle</groupId>
+            <artifactId>turtlecore-api</artifactId>
+            <version>${turtlecore.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

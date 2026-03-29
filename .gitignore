@@ -1,0 +1,28 @@
+# Build
+target/
+*.jar
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+
+# Maven
+dependency-reduced-pom.xml
+apache-maven-*/
+maven.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Plugin data
+/plugins/
+
+# Portable tools
+git-portable/

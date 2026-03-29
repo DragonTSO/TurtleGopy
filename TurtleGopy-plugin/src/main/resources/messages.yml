@@ -1,0 +1,45 @@
+# TurtleGopy Messages
+# Sử dụng & cho mã màu
+
+prefix: "&8[&6TurtleGopy&8] "
+
+# ============================================
+# Góp Ý - Tin nhắn cho người chơi
+# ============================================
+feedback-created: "&aBạn đã gửi góp ý thành công! ID: &e{id}"
+feedback-input-prompt: "&eHãy gõ nội dung góp ý vào chat. Gõ &c'cancel' &eđể hủy. &7(Hết hạn sau 60s)"
+feedback-input-cancelled: "&cBạn đã hủy góp ý."
+feedback-input-timeout: "&cHết thời gian nhập góp ý."
+feedback-status-changed: "&aGóp ý của bạn đã được cập nhật: &e{status}"
+feedback-reward: "&a🎁 Bạn đã nhận thưởng vì góp ý được chấp nhận!"
+feedback-deleted: "&cGóp ý đã bị xóa."
+feedback-empty: "&eBạn chưa có góp ý nào."
+
+# Góp Ý - Tin nhắn cho admin
+admin-status-updated: "&aĐã cập nhật trạng thái góp ý thành &e{status}"
+admin-new-feedback: "&e📩 Có góp ý mới từ &6{player}&e: &f{content}"
+admin-feedback-deleted: "&cĐã xóa góp ý &e{id}"
+
+# ============================================
+# Báo Lỗi - Tin nhắn cho người chơi
+# ============================================
+bugreport-created: "&aBạn đã gửi báo lỗi thành công! ID: &e{id}"
+bugreport-input-prompt: "&eHãy mô tả lỗi vào chat. Gõ &c'cancel' &eđể hủy. &7(Hết hạn sau 60s)"
+bugreport-input-cancelled: "&cBạn đã hủy báo lỗi."
+bugreport-input-timeout: "&cHết thời gian nhập báo lỗi."
+bugreport-status-changed: "&aBáo lỗi của bạn đã được cập nhật: &e{status}"
+bugreport-reward: "&a🎁 Bạn đã nhận thưởng vì báo lỗi hữu ích!"
+bugreport-deleted: "&cBáo lỗi đã bị xóa."
+bugreport-empty: "&eBạn chưa có báo lỗi nào."
+
+# Báo Lỗi - Tin nhắn cho admin
+admin-bugreport-status-updated: "&aĐã cập nhật trạng thái báo lỗi thành &e{status}"
+admin-new-bugreport: "&c🐛 Có báo lỗi mới từ &6{player}&c: &f{content}"
+admin-bugreport-deleted: "&cĐã xóa báo lỗi &e{id}"
+
+# ============================================
+# Tin nhắn chung
+# ============================================
+no-permission: "&cBạn không có quyền thực hiện hành động này."
+reload-success: "&aĐã reload config thành công!"
+player-only: "&cLệnh này chỉ dành cho người chơi."

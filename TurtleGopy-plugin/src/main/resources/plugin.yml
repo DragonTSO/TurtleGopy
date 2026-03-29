@@ -1,0 +1,20 @@
+name: TurtleGopy
+version: ${project.version}
+main: com.turtle.turtlegopy.TurtleGopyPlugin
+api-version: '1.21'
+folia-supported: true
+softdepend: [TurtleCore]
+description: Hệ thống góp ý và báo lỗi cho server Minecraft
+
+commands:
+  gopy:
+    description: Mở menu góp ý
+    usage: /gopy [check|reload]
+  baoloi:
+    description: Mở menu báo lỗi
+    usage: /baoloi [check]
+
+permissions:
+  turtlegopy.admin:
+    description: Quản lý góp ý và báo lỗi (check, reload)
+    default: op

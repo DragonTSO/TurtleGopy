@@ -51,6 +51,21 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
         String sub = args[0].toLowerCase();
 
         switch (sub) {
+            case "exit" -> {
+                // /hotro exit → leave support chat
+                if (!isHoTro) break;
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(core.getMessage("player-only"));
+                    return true;
+                }
+
+                if (core.getSupportChatManager().isInChat(player.getUniqueId())) {
+                    core.getSupportChatManager().leaveChat(player);
+                } else {
+                    player.sendMessage(core.getMessage("support-chat-not-in-chat"));
+                }
+            }
+
             case "check" -> {
                 if (!(sender instanceof Player player)) {
                     sender.sendMessage(core.getMessage("player-only"));
@@ -147,6 +162,9 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
             if (sender.hasPermission("turtlegopy.admin")) {
                 completions.add("check");
                 completions.add("reload");
+            }
+            if (label.equalsIgnoreCase("hotro")) {
+                completions.add("exit");
             }
 
             String input = args[0].toLowerCase();

@@ -55,6 +55,20 @@ admin-new-support: "&3🎫 Có phiếu hỗ trợ mới từ &6{player}&3: &f{co
 admin-support-deleted: "&cĐã xóa phiếu hỗ trợ &e{id}"
 
 # ============================================
+# Chat Hỗ Trợ - Luồng chat riêng
+# ============================================
+support-chat-enter: "&3&l🎫 Bạn đã vào chat hỗ trợ. Gõ &e'exit' &3hoặc &e/hotro exit &3để thoát."
+support-chat-exit: "&7Bạn đã thoát chat hỗ trợ. Đã trở về chat global."
+support-chat-not-in-chat: "&cBạn hiện không ở trong chat hỗ trợ nào."
+support-chat-format: "&8[&3HỖ TRỢ&8] {role} &f{player}&7: &f{message}"
+support-chat-history-header: "&8&m──────────────&r &3&l📋 Lịch Sử Chat Hỗ Trợ &8&m──────────────"
+support-chat-history-footer: "&8&m──────────────&r &7Gõ tin nhắn để chat • &e'exit' &7để thoát &8&m──────────────"
+support-chat-no-history: "&7  Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!"
+support-chat-role-player: "&a[Người chơi]"
+support-chat-role-staff: "&c[Staff]"
+support-chat-notify-new: "&3🎫 {player} đã gửi tin nhắn trong phiếu hỗ trợ &e#{id}"
+
+# ============================================
 # Mending Repair - Sửa đồ bằng XP
 # ============================================
 mending-not-damaged: "&aĐồ của bạn không bị hư hại!"

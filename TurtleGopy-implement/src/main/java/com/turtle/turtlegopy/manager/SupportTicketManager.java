@@ -75,6 +75,8 @@ public class SupportTicketManager {
 
     public void deleteTicket(UUID ticketId) {
         core.getSupportTicketStorageProvider().delete(ticketId);
+        // Also delete associated chat messages
+        core.getSupportChatStorageProvider().deleteByTicket(ticketId);
     }
 
     public SupportTicket getTicket(UUID ticketId) {

@@ -110,6 +110,15 @@ public class AdminSupportManageGUI implements InventoryHolder {
                 "§e◀ Quay Lại",
                 List.of("§7Quay lại danh sách hỗ trợ"));
         inventory.setItem(22, backBtn);
+
+        // Open Chat button
+        ItemStack chatBtn = createItem(Material.NAME_TAG,
+                "§3§l💬 Mở Chat",
+                List.of("§7Vào luồng chat riêng với người chơi",
+                        "§7Để hỗ trợ trực tiếp",
+                        "",
+                        "§e➤ Click để mở chat"));
+        inventory.setItem(15, chatBtn);
     }
 
     public static void handleClick(TurtleGopyCore core, InventoryClickEvent event) {
@@ -144,6 +153,11 @@ public class AdminSupportManageGUI implements InventoryHolder {
                 admin.sendMessage(core.getMessage("admin-support-status-updated")
                         .replace("{status}", SupportTicketStatus.REJECTED.getDisplayName()));
                 open(core, admin, gui.ticketId);
+            }
+            case 15 -> {
+                // Open Chat
+                admin.closeInventory();
+                core.getSupportChatManager().enterChat(admin, gui.ticketId);
             }
             case 16 -> {
                 core.getSupportTicketManager().deleteTicket(gui.ticketId);

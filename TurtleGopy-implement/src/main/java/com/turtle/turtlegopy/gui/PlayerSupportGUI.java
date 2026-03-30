@@ -122,6 +122,8 @@ public class PlayerSupportGUI implements InventoryHolder {
 
         lore.add("§8────────────────────");
         lore.add("§7ID: §8" + ticket.getId().toString().substring(0, 8));
+        lore.add("");
+        lore.add("§e➤ Click để mở chat hỗ trợ");
 
         ItemStack item = new ItemStack(ticket.getStatus().getIcon());
         ItemMeta meta = item.getItemMeta();
@@ -197,6 +199,28 @@ public class PlayerSupportGUI implements InventoryHolder {
             int totalPages = Math.max(1, (int) Math.ceil((double) tickets.size() / ITEMS_PER_PAGE));
             if (gui.page < totalPages - 1) {
                 open(core, player, gui.page + 1);
+            }
+            return;
+        }
+
+        // Content slot clicked - open chat for that ticket
+        int[] contentSlots = gui.getContentSlots();
+        int contentIndex = -1;
+        for (int i = 0; i < contentSlots.length; i++) {
+            if (contentSlots[i] == slot) {
+                contentIndex = i;
+                break;
+            }
+        }
+
+        if (contentIndex >= 0) {
+            List<SupportTicket> tickets = core.getSupportTicketManager().getPlayerTickets(player.getUniqueId());
+            tickets.sort((a, b) -> Long.compare(b.getCreatedAt(), a.getCreatedAt()));
+            int ticketIndex = gui.page * ITEMS_PER_PAGE + contentIndex;
+            if (ticketIndex < tickets.size()) {
+                SupportTicket ticket = tickets.get(ticketIndex);
+                player.closeInventory();
+                core.getSupportChatManager().enterChat(player, ticket.getId());
             }
         }
     }

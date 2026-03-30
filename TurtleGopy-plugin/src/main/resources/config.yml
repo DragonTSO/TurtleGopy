@@ -73,6 +73,14 @@ support-rewards:
     - "crates give {player} amethyst 1"
 
 # ============================================
+# Support Chat Settings
+# ============================================
+# Luồng chat riêng cho mỗi phiếu hỗ trợ
+support-chat:
+  # Từ để thoát chat (ngoài /hotro exit)
+  exit-word: "exit"
+
+# ============================================
 # GUI Settings
 # ============================================
 gui:

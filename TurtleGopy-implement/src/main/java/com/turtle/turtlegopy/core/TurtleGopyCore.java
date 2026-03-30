@@ -2,20 +2,25 @@ package com.turtle.turtlegopy.core;
 
 import com.turtle.turtlegopy.api.storage.BugReportStorageProvider;
 import com.turtle.turtlegopy.api.storage.StorageProvider;
+import com.turtle.turtlegopy.api.storage.SupportChatStorageProvider;
 import com.turtle.turtlegopy.api.storage.SupportTicketStorageProvider;
 import com.turtle.turtlegopy.command.GopyCommand;
 import com.turtle.turtlegopy.gui.GUIListener;
 import com.turtle.turtlegopy.listener.ChatInputListener;
 import com.turtle.turtlegopy.listener.MendingRepairListener;
+import com.turtle.turtlegopy.listener.SupportChatListener;
 import com.turtle.turtlegopy.manager.BroadcastManager;
 import com.turtle.turtlegopy.manager.BugReportManager;
 import com.turtle.turtlegopy.manager.FeedbackManager;
+import com.turtle.turtlegopy.manager.SupportChatManager;
 import com.turtle.turtlegopy.manager.SupportTicketManager;
 import com.turtle.turtlegopy.storage.DatabaseBugReportStorageProvider;
 import com.turtle.turtlegopy.storage.DatabaseStorageProvider;
+import com.turtle.turtlegopy.storage.DatabaseSupportChatStorageProvider;
 import com.turtle.turtlegopy.storage.DatabaseSupportTicketStorageProvider;
 import com.turtle.turtlegopy.storage.YamlBugReportStorageProvider;
 import com.turtle.turtlegopy.storage.YamlStorageProvider;
+import com.turtle.turtlegopy.storage.YamlSupportChatStorageProvider;
 import com.turtle.turtlegopy.storage.YamlSupportTicketStorageProvider;
 
 import org.bukkit.command.PluginCommand;
@@ -37,11 +42,14 @@ public class TurtleGopyCore {
     private StorageProvider storageProvider;
     private BugReportStorageProvider bugReportStorageProvider;
     private SupportTicketStorageProvider supportTicketStorageProvider;
+    private SupportChatStorageProvider supportChatStorageProvider;
     private FeedbackManager feedbackManager;
     private BugReportManager bugReportManager;
     private SupportTicketManager supportTicketManager;
+    private SupportChatManager supportChatManager;
     private BroadcastManager broadcastManager;
     private ChatInputListener chatInputListener;
+    private SupportChatListener supportChatListener;
     private FileConfiguration messagesConfig;
 
     public TurtleGopyCore(JavaPlugin plugin) {
@@ -58,10 +66,13 @@ public class TurtleGopyCore {
         feedbackManager = new FeedbackManager(this);
         bugReportManager = new BugReportManager(this);
         supportTicketManager = new SupportTicketManager(this);
+        supportChatManager = new SupportChatManager(this);
         broadcastManager = new BroadcastManager(this);
         chatInputListener = new ChatInputListener(this);
+        supportChatListener = new SupportChatListener(this);
 
         plugin.getServer().getPluginManager().registerEvents(chatInputListener, plugin);
+        plugin.getServer().getPluginManager().registerEvents(supportChatListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(new GUIListener(this), plugin);
         plugin.getServer().getPluginManager().registerEvents(new MendingRepairListener(this), plugin);
 
@@ -99,6 +110,9 @@ public class TurtleGopyCore {
         if (chatInputListener != null) {
             chatInputListener.clearAll();
         }
+        if (supportChatManager != null) {
+            supportChatManager.clearAll();
+        }
         if (storageProvider != null) {
             storageProvider.shutdown();
         }
@@ -107,6 +121,9 @@ public class TurtleGopyCore {
         }
         if (supportTicketStorageProvider != null) {
             supportTicketStorageProvider.shutdown();
+        }
+        if (supportChatStorageProvider != null) {
+            supportChatStorageProvider.shutdown();
         }
         plugin.getLogger().info("TurtleGopy đã bị vô hiệu hóa!");
     }
@@ -124,11 +141,15 @@ public class TurtleGopyCore {
         if (supportTicketStorageProvider != null) {
             supportTicketStorageProvider.shutdown();
         }
+        if (supportChatStorageProvider != null) {
+            supportChatStorageProvider.shutdown();
+        }
         initStorage();
 
         feedbackManager = new FeedbackManager(this);
         bugReportManager = new BugReportManager(this);
         supportTicketManager = new SupportTicketManager(this);
+        supportChatManager = new SupportChatManager(this);
         broadcastManager.reload();
     }
 
@@ -145,6 +166,9 @@ public class TurtleGopyCore {
 
             supportTicketStorageProvider = new DatabaseSupportTicketStorageProvider(this, dbProvider.getDataSource());
             supportTicketStorageProvider.init();
+
+            supportChatStorageProvider = new DatabaseSupportChatStorageProvider(this, dbProvider.getDataSource());
+            supportChatStorageProvider.init();
         } else {
             storageProvider = new YamlStorageProvider(this);
             storageProvider.init();
@@ -154,6 +178,9 @@ public class TurtleGopyCore {
 
             supportTicketStorageProvider = new YamlSupportTicketStorageProvider(this);
             supportTicketStorageProvider.init();
+
+            supportChatStorageProvider = new YamlSupportChatStorageProvider(this);
+            supportChatStorageProvider.init();
         }
 
         plugin.getLogger().info("Đã khởi tạo storage: " + storageType);

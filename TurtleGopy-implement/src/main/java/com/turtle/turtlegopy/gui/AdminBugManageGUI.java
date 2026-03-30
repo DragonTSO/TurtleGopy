@@ -82,24 +82,30 @@ public class AdminBugManageGUI implements InventoryHolder {
                         report.getStatus() == BugReportStatus.READ ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
         inventory.setItem(10, readBtn);
 
+        ItemStack checkingBtn = createItem(Material.SPYGLASS,
+                "§e§lĐang Kiểm Tra",
+                List.of("§7Đánh dấu đang trong quá trình kiểm tra",
+                        report.getStatus() == BugReportStatus.CHECKING ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
+        inventory.setItem(11, checkingBtn);
+
         ItemStack fixingBtn = createItem(Material.ANVIL,
                 "§6§lĐang Sửa",
                 List.of("§7Đánh dấu đang trong quá trình sửa",
                         report.getStatus() == BugReportStatus.FIXING ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
-        inventory.setItem(11, fixingBtn);
+        inventory.setItem(12, fixingBtn);
 
         ItemStack fixedBtn = createItem(Material.EMERALD,
                 "§a§lĐã Sửa",
                 List.of("§7Đánh dấu lỗi đã được sửa",
                         "§7Sẽ trao thưởng cho người báo",
                         report.getStatus() == BugReportStatus.FIXED ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
-        inventory.setItem(12, fixedBtn);
+        inventory.setItem(13, fixedBtn);
 
         ItemStack rejectBtn = createItem(Material.BARRIER,
                 "§c§lKhông Phải Lỗi",
                 List.of("§7Đánh dấu không phải lỗi",
                         report.getStatus() == BugReportStatus.REJECTED ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
-        inventory.setItem(13, rejectBtn);
+        inventory.setItem(14, rejectBtn);
 
         ItemStack deleteBtn = createItem(Material.TNT,
                 "§4§lXóa Báo Lỗi",
@@ -129,18 +135,24 @@ public class AdminBugManageGUI implements InventoryHolder {
                 open(core, admin, gui.reportId);
             }
             case 11 -> {
+                core.getBugReportManager().updateStatus(gui.reportId, BugReportStatus.CHECKING);
+                admin.sendMessage(core.getMessage("admin-bugreport-status-updated")
+                        .replace("{status}", BugReportStatus.CHECKING.getDisplayName()));
+                open(core, admin, gui.reportId);
+            }
+            case 12 -> {
                 core.getBugReportManager().updateStatus(gui.reportId, BugReportStatus.FIXING);
                 admin.sendMessage(core.getMessage("admin-bugreport-status-updated")
                         .replace("{status}", BugReportStatus.FIXING.getDisplayName()));
                 open(core, admin, gui.reportId);
             }
-            case 12 -> {
+            case 13 -> {
                 core.getBugReportManager().updateStatus(gui.reportId, BugReportStatus.FIXED);
                 admin.sendMessage(core.getMessage("admin-bugreport-status-updated")
                         .replace("{status}", BugReportStatus.FIXED.getDisplayName()));
                 open(core, admin, gui.reportId);
             }
-            case 13 -> {
+            case 14 -> {
                 core.getBugReportManager().updateStatus(gui.reportId, BugReportStatus.REJECTED);
                 admin.sendMessage(core.getMessage("admin-bugreport-status-updated")
                         .replace("{status}", BugReportStatus.REJECTED.getDisplayName()));

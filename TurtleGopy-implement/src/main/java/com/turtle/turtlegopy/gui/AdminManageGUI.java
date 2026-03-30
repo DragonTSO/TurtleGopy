@@ -100,12 +100,19 @@ public class AdminManageGUI implements InventoryHolder {
                         feedback.getStatus() == FeedbackStatus.REJECTED ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
         inventory.setItem(12, rejectBtn);
 
+        // Deploying
+        ItemStack deployBtn = createItem(Material.CRAFTING_TABLE,
+                "§6§lĐang Triển Khai",
+                List.of("§7Đánh dấu góp ý đang được triển khai",
+                        feedback.getStatus() == FeedbackStatus.DEPLOYING ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
+        inventory.setItem(13, deployBtn);
+
         // Implemented
         ItemStack implBtn = createItem(Material.NETHER_STAR,
                 "§d§lĐã Triển Khai",
                 List.of("§7Đánh dấu góp ý đã được triển khai",
                         feedback.getStatus() == FeedbackStatus.IMPLEMENTED ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
-        inventory.setItem(13, implBtn);
+        inventory.setItem(14, implBtn);
 
         // Delete
         ItemStack deleteBtn = createItem(Material.TNT,
@@ -152,6 +159,13 @@ public class AdminManageGUI implements InventoryHolder {
                 open(core, admin, gui.feedbackId);
             }
             case 13 -> {
+                // Deploying
+                core.getFeedbackManager().updateStatus(gui.feedbackId, FeedbackStatus.DEPLOYING);
+                admin.sendMessage(core.getMessage("admin-status-updated")
+                        .replace("{status}", FeedbackStatus.DEPLOYING.getDisplayName()));
+                open(core, admin, gui.feedbackId);
+            }
+            case 14 -> {
                 // Implemented
                 core.getFeedbackManager().updateStatus(gui.feedbackId, FeedbackStatus.IMPLEMENTED);
                 admin.sendMessage(core.getMessage("admin-status-updated")

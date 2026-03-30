@@ -10,6 +10,7 @@ public enum FeedbackStatus {
     PENDING("§e⏳ Chờ xử lý", Material.CLOCK, "§e"),
     READ("§b👁 Đã đọc", Material.ENDER_EYE, "§b"),
     ACCEPTED("§a✔ Đã chấp nhận", Material.EMERALD, "§a"),
+    DEPLOYING("§6🚀 Đang triển khai", Material.CRAFTING_TABLE, "§6"),
     REJECTED("§c✘ Từ chối", Material.BARRIER, "§c"),
     IMPLEMENTED("§d⚡ Đã triển khai", Material.NETHER_STAR, "§d");
 

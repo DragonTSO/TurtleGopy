@@ -57,11 +57,16 @@ public class BaoLoiCommand implements CommandExecutor, TabCompleter {
             }
 
             default -> {
-                sender.sendMessage(core.colorize("&c&lBáo Lỗi &8- &7Các lệnh:"));
-                sender.sendMessage(core.colorize("&e/baoloi &8- &7Mở menu báo lỗi"));
-                if (sender.hasPermission("turtlegopy.admin")) {
-                    sender.sendMessage(core.colorize("&e/baoloi check &8- &7Quản lý báo lỗi"));
+                // Quick create: /baoloi <content>
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(core.getMessage("player-only"));
+                    return true;
                 }
+
+                String content = String.join(" ", args);
+                var report = core.getBugReportManager().createReport(player, content);
+                player.sendMessage(core.getMessage("bugreport-created")
+                        .replace("{id}", report.getId().toString().substring(0, 8)));
             }
         }
 

@@ -25,6 +25,16 @@ public class SupportTicketManager {
         this.core = core;
     }
 
+    /**
+     * Check if a player already has an active (not resolved/rejected) ticket.
+     */
+    public boolean hasActiveTicket(UUID playerUUID) {
+        List<SupportTicket> tickets = getPlayerTickets(playerUUID);
+        return tickets.stream().anyMatch(t ->
+                t.getStatus() != SupportTicketStatus.RESOLVED &&
+                t.getStatus() != SupportTicketStatus.REJECTED);
+    }
+
     public SupportTicket createTicket(Player player, String content) {
         SupportTicket ticket = SupportTicket.builder()
                 .id(UUID.randomUUID())

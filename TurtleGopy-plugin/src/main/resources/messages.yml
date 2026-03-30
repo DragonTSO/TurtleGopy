@@ -48,6 +48,7 @@ support-status-changed: "&aPhiếu hỗ trợ của bạn đã được cập nh
 support-reward: "&a🎁 Bạn đã nhận thưởng!"
 support-deleted: "&cPhiếu hỗ trợ đã bị xóa."
 support-empty: "&eBạn chưa có phiếu hỗ trợ nào."
+support-already-active: "&cBạn đã có phiếu hỗ trợ đang xử lý! Vui lòng chờ phiếu hiện tại được giải quyết hoặc từ chối."
 
 # Hỗ Trợ - Tin nhắn cho admin
 admin-support-status-updated: "&aĐã cập nhật trạng thái hỗ trợ thành &e{status}"

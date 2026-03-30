@@ -141,6 +141,10 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(core.getMessage("bugreport-created")
                             .replace("{id}", report.getId().toString().substring(0, 8)));
                 } else if (isHoTro) {
+                    if (core.getSupportTicketManager().hasActiveTicket(player.getUniqueId())) {
+                        player.sendMessage(core.getMessage("support-already-active"));
+                        return true;
+                    }
                     var ticket = core.getSupportTicketManager().createTicket(player, content);
                     player.sendMessage(core.getMessage("support-created")
                             .replace("{id}", ticket.getId().toString().substring(0, 8)));

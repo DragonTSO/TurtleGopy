@@ -183,6 +183,10 @@ public class PlayerSupportGUI implements InventoryHolder {
         int slot = event.getRawSlot();
 
         if (slot == 49) {
+            if (core.getSupportTicketManager().hasActiveTicket(player.getUniqueId())) {
+                player.sendMessage(core.getMessage("support-already-active"));
+                return;
+            }
             player.closeInventory();
             core.getChatInputListener().startSupportInput(player);
             player.sendMessage(core.getMessage("support-input-prompt"));

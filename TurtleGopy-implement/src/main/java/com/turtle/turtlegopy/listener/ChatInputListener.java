@@ -162,6 +162,10 @@ public class ChatInputListener implements Listener {
                         .replace("{id}", report.getId().toString().substring(0, 8));
                 player.sendMessage(successMessage);
             } else if (mode == MODE_SUPPORT) {
+                if (core.getSupportTicketManager().hasActiveTicket(player.getUniqueId())) {
+                    player.sendMessage(core.getMessage("support-already-active"));
+                    return;
+                }
                 SupportTicket ticket = core.getSupportTicketManager().createTicket(player, message);
                 String successMessage = core.getMessage("support-created")
                         .replace("{id}", ticket.getId().toString().substring(0, 8));

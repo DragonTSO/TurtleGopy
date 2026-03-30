@@ -1,6 +1,6 @@
 # 🐢 TurtleGopy
 
-> Hệ thống **Góp Ý**, **Báo Lỗi** và **Auto Broadcast** cho server Minecraft.
+> Hệ thống **Góp Ý**, **Báo Lỗi**, **Hỗ Trợ** và **Auto Broadcast** cho server Minecraft.
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.x-green)](https://www.minecraft.net/)
 [![Folia](https://img.shields.io/badge/Folia-Supported-blue)](https://papermc.io/software/folia)
@@ -12,15 +12,26 @@
 
 ### 📝 Góp Ý (`/gopy`)
 - Người chơi gửi góp ý qua **GUI** hoặc **lệnh nhanh**
-- Theo dõi trạng thái góp ý (Chờ xử lý → Đã đọc → Chấp nhận / Từ chối)
+- Theo dõi trạng thái góp ý (Chờ xử lý → Đã đọc → Chấp nhận → **Đang triển khai** → Đã triển khai / Từ chối)
 - Admin quản lý, đánh giá và phản hồi góp ý
 - **Tự động trao thưởng** khi góp ý được chấp nhận
 
 ### 🐛 Báo Lỗi (`/baoloi`)
-- Người chơi báo lỗi qua **GUI** hoặc **lệnh nhanh**
-- Theo dõi trạng thái (Chờ xử lý → Đã đọc → Đang sửa → Đã sửa / Không phải lỗi)
+- Người chơi báo lỗi qua **GUI** hoặc **lệnh nhanh** (`/baoloi <nội dung>`)
+- Theo dõi trạng thái (Chờ xử lý → Đã đọc → **Đang kiểm tra** → Đang sửa → Đã sửa / Không phải lỗi)
 - Admin quản lý và cập nhật trạng thái lỗi
 - **Tự động trao thưởng** khi lỗi được xác nhận đã sửa
+
+### 🎫 Hỗ Trợ (`/hotro`)
+- Người chơi tạo phiếu hỗ trợ qua **GUI** hoặc **lệnh nhanh**
+- **Giới hạn 1 phiếu** mỗi người chơi (tạo mới khi phiếu cũ đã giải quyết/từ chối)
+- Theo dõi trạng thái (Chờ xử lý → Đã đọc → Đang xử lý → Đã giải quyết / Từ chối)
+- **💬 Chat riêng** — luồng chat private giữa người chơi và staff/admin
+  - Tin nhắn chỉ hiển thị trong luồng chat, **không hiện ở global**
+  - **Async messaging** — không cần cả 2 bên online cùng lúc
+  - Khi vào lại chat → hiện **toàn bộ lịch sử** cuộc trò chuyện
+  - Admin online nhận notification khi có tin nhắn mới
+- **Tự động trao thưởng** khi phiếu được giải quyết (có thể bật/tắt)
 
 ### 📢 Auto Broadcast
 - Tự động gửi thông báo lên chat theo thời gian
@@ -28,6 +39,11 @@
 - Gửi **cả cụm tin nhắn** cùng lúc (không phải từng dòng)
 - Chế độ **tuần tự** hoặc **ngẫu nhiên**
 - Lọc theo **permission**
+
+### 🔧 Mending Repair
+- Shift + Chuột phải khi cầm đồ có Mending để sửa bằng XP
+- Cấu hình durability/XP ratio
+- Hỗ trợ permission riêng
 
 ---
 
@@ -41,6 +57,9 @@
 | `/gopy <nội dung>` | Tạo nhanh góp ý |
 | `/baoloi` | Mở GUI báo lỗi |
 | `/baoloi <nội dung>` | Tạo nhanh báo lỗi |
+| `/hotro` | Mở GUI hỗ trợ |
+| `/hotro <nội dung>` | Tạo nhanh phiếu hỗ trợ |
+| `/hotro exit` | Thoát chat hỗ trợ (về global) |
 
 ### Admin (`turtlegopy.admin`)
 
@@ -48,6 +67,7 @@
 |-------|-------|
 | `/gopy check` | Quản lý tất cả góp ý |
 | `/baoloi check` | Quản lý tất cả báo lỗi |
+| `/hotro check` | Quản lý tất cả phiếu hỗ trợ |
 | `/gopy reload` | Reload config |
 
 ---
@@ -56,9 +76,9 @@
 
 | Permission | Mô tả | Mặc định |
 |-----------|-------|----------|
-| `turtlegopy.admin` | Quản lý góp ý, báo lỗi, reload | OP |
+| `turtlegopy.admin` | Quản lý góp ý, báo lỗi, hỗ trợ, reload | OP |
 
-> Người chơi thường **không cần permission** để sử dụng `/gopy` và `/baoloi`.
+> Người chơi thường **không cần permission** để sử dụng `/gopy`, `/baoloi` và `/hotro`.
 
 ---
 
@@ -79,6 +99,14 @@ storage:
     password: ""
 ```
 
+#### Mending Repair
+```yaml
+mending-repair:
+  enabled: true
+  durability-per-xp: 2    # Số durability phục hồi mỗi 1 XP
+  permission: ""           # Để trống = ai cũng dùng được
+```
+
 #### Phần thưởng
 ```yaml
 # Thưởng khi góp ý được chấp nhận
@@ -93,6 +121,18 @@ bugreport-rewards:
   enabled: true
   commands:
     - "crates give {player} amethyst 1"
+
+# Thưởng khi phiếu hỗ trợ được giải quyết
+support-rewards:
+  enabled: false
+  commands:
+    - "crates give {player} amethyst 1"
+```
+
+#### Support Chat
+```yaml
+support-chat:
+  exit-word: "exit"  # Từ để thoát chat (ngoài /hotro exit)
 ```
 
 #### Auto Broadcast
@@ -114,10 +154,40 @@ broadcast:
           - "&8&m─────────────────────────────────"
           - "&c&l🐛 BÁO LỖI &8- &fGõ &e/baoloi &fđể báo lỗi!"
           - "&8&m─────────────────────────────────"
+        3:
+          - "&8&m─────────────────────────────────"
+          - "&3&l🎫 HỖ TRỢ &8- &fCần giúp đỡ? Gõ &e/hotro &fđể gửi yêu cầu!"
+          - "&8&m─────────────────────────────────"
 ```
 
 ### `messages.yml`
 Tất cả tin nhắn đều có thể tùy chỉnh trong file `messages.yml`. Hỗ trợ color code `&`.
+
+---
+
+## 💬 Hệ thống Chat Hỗ Trợ
+
+Mỗi phiếu hỗ trợ có một **luồng chat riêng** để người chơi và staff trao đổi trực tiếp:
+
+```
+┌─────────────────────────────────────────────────┐
+│  Vào chat:                                       │
+│  • Player: /hotro → GUI → Click ticket           │
+│  • Admin: /hotro check → Quản lý → "💬 Mở Chat"  │
+├─────────────────────────────────────────────────┤
+│  Trong chat:                                     │
+│  ✅ Tin nhắn chỉ hiện cho người trong chat        │
+│  ✅ Global chat KHÔNG thấy                        │
+│  ✅ Admin online nhận notification                │
+│  ✅ Lưu persistent (YAML/Database)                │
+├─────────────────────────────────────────────────┤
+│  Thoát: gõ "exit" hoặc /hotro exit               │
+│  → Trở về chat global                            │
+├─────────────────────────────────────────────────┤
+│  Async: không cần 2 bên online cùng lúc          │
+│  → Vào lại → thấy toàn bộ lịch sử chat          │
+└─────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -126,22 +196,32 @@ Tất cả tin nhắn đều có thể tùy chỉnh trong file `messages.yml`. H
 ```
 TurtleGopy/
 ├── TurtleGopy-api/          # API - Models & Interfaces
-│   ├── Feedback.java
-│   ├── FeedbackStatus.java
-│   ├── BugReport.java
-│   ├── BugReportStatus.java
-│   ├── StorageProvider.java
-│   └── BugReportStorageProvider.java
+│   ├── model/
+│   │   ├── Feedback.java
+│   │   ├── FeedbackStatus.java       # +DEPLOYING
+│   │   ├── BugReport.java
+│   │   ├── BugReportStatus.java      # +CHECKING
+│   │   ├── SupportTicket.java
+│   │   ├── SupportTicketStatus.java
+│   │   └── SupportChatMessage.java
+│   └── storage/
+│       ├── StorageProvider.java
+│       ├── BugReportStorageProvider.java
+│       ├── SupportTicketStorageProvider.java
+│       └── SupportChatStorageProvider.java
 │
 ├── TurtleGopy-implement/    # Logic - Managers, Commands, GUI, Storage
 │   ├── core/
 │   │   ├── TurtleGopyCore.java
-│   │   └── SchedulerUtil.java      # Folia-compatible scheduler
+│   │   └── SchedulerUtil.java
 │   ├── command/
-│   │   └── GopyCommand.java        # Handles /gopy & /baoloi
+│   │   ├── GopyCommand.java          # /gopy, /baoloi, /hotro
+│   │   └── BaoLoiCommand.java        # /baoloi (standalone)
 │   ├── manager/
 │   │   ├── FeedbackManager.java
 │   │   ├── BugReportManager.java
+│   │   ├── SupportTicketManager.java
+│   │   ├── SupportChatManager.java
 │   │   └── BroadcastManager.java
 │   ├── gui/
 │   │   ├── PlayerGUI.java
@@ -149,15 +229,24 @@ TurtleGopy/
 │   │   ├── AdminManageGUI.java
 │   │   ├── PlayerBugReportGUI.java
 │   │   ├── AdminBugReportGUI.java
-│   │   └── AdminBugManageGUI.java
+│   │   ├── AdminBugManageGUI.java
+│   │   ├── PlayerSupportGUI.java
+│   │   ├── AdminSupportGUI.java
+│   │   ├── AdminSupportManageGUI.java
+│   │   └── GUIListener.java
 │   ├── storage/
 │   │   ├── YamlStorageProvider.java
 │   │   ├── DatabaseStorageProvider.java
 │   │   ├── YamlBugReportStorageProvider.java
-│   │   └── DatabaseBugReportStorageProvider.java
+│   │   ├── DatabaseBugReportStorageProvider.java
+│   │   ├── YamlSupportTicketStorageProvider.java
+│   │   ├── DatabaseSupportTicketStorageProvider.java
+│   │   ├── YamlSupportChatStorageProvider.java
+│   │   └── DatabaseSupportChatStorageProvider.java
 │   └── listener/
 │       ├── ChatInputListener.java
-│       └── GUIListener.java
+│       ├── SupportChatListener.java
+│       └── MendingRepairListener.java
 │
 └── TurtleGopy-plugin/       # Entry point
     ├── TurtleGopyPlugin.java

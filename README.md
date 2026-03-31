@@ -28,6 +28,7 @@
 - Theo dõi trạng thái (Chờ xử lý → Đã đọc → Đang xử lý → Đã giải quyết / Từ chối)
 - **💬 Chat riêng** — luồng chat private giữa người chơi và staff/admin
   - Tin nhắn chỉ hiển thị trong luồng chat, **không hiện ở global**
+  - **🔇 Cách ly chat global** — khi đang trong phiên hỗ trợ, người chơi **không thấy** tin nhắn chat global
   - **Async messaging** — không cần cả 2 bên online cùng lúc
   - Khi vào lại chat → hiện **toàn bộ lịch sử** cuộc trò chuyện
   - Admin online nhận notification khi có tin nhắn mới
@@ -178,6 +179,7 @@ Mỗi phiếu hỗ trợ có một **luồng chat riêng** để người chơi 
 │  Trong chat:                                     │
 │  ✅ Tin nhắn chỉ hiện cho người trong chat        │
 │  ✅ Global chat KHÔNG thấy                        │
+│  🔇 Người chơi KHÔNG nhận tin nhắn global        │
 │  ✅ Admin online nhận notification                │
 │  ✅ Lưu persistent (YAML/Database)                │
 ├─────────────────────────────────────────────────┤

@@ -20,6 +20,10 @@ public class SupportChatListener implements Listener {
         this.core = core;
     }
 
+    /**
+     * LOWEST priority: intercept messages FROM players in support chat,
+     * cancel them from global, and route to the support chat system.
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
@@ -43,6 +47,21 @@ public class SupportChatListener implements Listener {
         // Send message in support chat - run on entity thread
         SchedulerUtil.runEntityTask(core.getPlugin(), player, () ->
                 core.getSupportChatManager().sendMessage(player, message));
+    }
+
+    /**
+     * HIGH priority: remove players currently in support chat from the
+     * recipients of normal global chat messages.
+     * This ensures players in support chat cannot see any global messages
+     * until they exit the support session.
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onGlobalChat(AsyncPlayerChatEvent event) {
+        // If the sender is in support chat, LOWEST handler already cancelled it,
+        // and ignoreCancelled = true means we won't reach here. So this only
+        // fires for normal global chat from non-support-chat players.
+        event.getRecipients().removeIf(recipient ->
+                core.getSupportChatManager().isInChat(recipient.getUniqueId()));
     }
 
     @EventHandler

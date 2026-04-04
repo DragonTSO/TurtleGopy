@@ -41,6 +41,16 @@ public class BugReportManager {
 
         notifyAdmins(player, content);
 
+        // Discord notification
+        core.getDiscordBotManager().sendBugReportCreated(
+                report.getId().toString(),
+                report.getPlayerName(),
+                report.getPlayerUUID().toString(),
+                report.getContent(),
+                report.getStatus().name(),
+                report.getCreatedAt()
+        );
+
         return report;
     }
 
@@ -59,6 +69,9 @@ public class BugReportManager {
                 player.sendMessage(message);
             }
         }
+
+        // Discord status update
+        core.getDiscordBotManager().sendBugReportStatusUpdate(reportId.toString(), newStatus.name());
 
         if (newStatus == BugReportStatus.FIXED && !report.isRewardGiven()) {
             giveReward(report);

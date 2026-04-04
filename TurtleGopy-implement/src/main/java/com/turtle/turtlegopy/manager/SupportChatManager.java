@@ -118,6 +118,10 @@ public class SupportChatManager {
         SchedulerUtil.runAsync(core.getPlugin(), () ->
                 core.getSupportChatStorageProvider().saveMessage(chatMsg));
 
+        // Forward to Discord
+        core.getDiscordBotManager().sendSupportChatMessage(
+                ticketId.toString(), sender.getName(), message, isStaff);
+
         // Format the message
         String roleTag = isStaff
                 ? core.getMessageNoPrefix("support-chat-role-staff")

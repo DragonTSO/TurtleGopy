@@ -51,6 +51,16 @@ public class SupportTicketManager {
 
         notifyAdmins(player, content);
 
+        // Discord notification
+        core.getDiscordBotManager().sendSupportCreated(
+                ticket.getId().toString(),
+                ticket.getPlayerName(),
+                ticket.getPlayerUUID().toString(),
+                ticket.getContent(),
+                ticket.getStatus().name(),
+                ticket.getCreatedAt()
+        );
+
         return ticket;
     }
 
@@ -73,6 +83,9 @@ public class SupportTicketManager {
         if (newStatus == SupportTicketStatus.RESOLVED && !ticket.isRewardGiven()) {
             giveReward(ticket);
         }
+
+        // Discord status update
+        core.getDiscordBotManager().sendSupportStatusUpdate(ticketId.toString(), newStatus.name());
     }
 
     public void setAdminNote(UUID ticketId, String note) {

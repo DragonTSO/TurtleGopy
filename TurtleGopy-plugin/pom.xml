@@ -29,16 +29,15 @@
             <artifactId>paper-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.turtle</groupId>
-            <artifactId>turtlecore-api</artifactId>
-            <version>${turtlecore.version}</version>
-            <scope>provided</scope>
-        </dependency>
+
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
         </dependency>
     </dependencies>
 
@@ -63,7 +62,21 @@
                             <pattern>com.zaxxer.hikari</pattern>
                             <shadedPattern>com.turtle.turtlegopy.libs.hikari</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.dv8tion</pattern>
+                            <shadedPattern>com.turtle.turtlegopy.libs.jda</shadedPattern>
+                        </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
             </plugin>
         </plugins>

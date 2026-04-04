@@ -115,6 +115,48 @@ gui:
     items-per-page: 28
 
 # ============================================
+# Discord Bot Settings
+# ============================================
+# Liên kết với TurtleGopyBot Discord Bot
+# Mỗi góp ý / báo lỗi sẽ tạo 1 channel Discord riêng
+# Admin có thể set trạng thái trực tiếp từ Discord
+discord:
+  enabled: true
+  # Token Discord Bot (từ Discord Developer Portal)
+  token: "YOUR_BOT_TOKEN"
+  # Discord Guild (Server) ID
+  guild-id: "1431941220846010411"
+  # Category ID cho channels Góp Ý
+  feedback-category-id: "1489906376737292359"
+  # Category ID cho channels Báo Lỗi
+  bugreport-category-id: "1489906405841571931"
+  # Category ID cho channels Hỗ Trợ
+  support-category-id: "1489906431284219946"
+
+  # Tên cụm (cluster) cho channel Discord
+  # Format channel: <loại>-<cụm>-<id>
+  # Ví dụ: baoloi-sv1-a1b2c3d4, gopy-sv1-a1b2c3d4
+  # Để trống = không có cụm (baoloi-a1b2c3d4)
+  channel-cluster: "smp"
+
+  # Bật/tắt riêng từng loại
+  feedback:
+    enabled: true
+  bugreport:
+    enabled: true
+  support:
+    enabled: true
+
+  # Trạng thái hiển thị của bot trên Discord
+  # Placeholders: {tickets} = tổng số phiếu đang mở
+  bot-status: "Đang hỗ trợ {tickets} phiếu"
+
+  # Channel ID để log các sự kiện (tạo phiếu, đổi trạng thái, etc.)
+  # Để trống = không log
+  log-channel-id: ""
+
+
+# ============================================
 # Notification Settings
 # ============================================
 notification:

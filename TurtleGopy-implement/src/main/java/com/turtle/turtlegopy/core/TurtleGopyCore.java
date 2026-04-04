@@ -5,6 +5,7 @@ import com.turtle.turtlegopy.api.storage.StorageProvider;
 import com.turtle.turtlegopy.api.storage.SupportChatStorageProvider;
 import com.turtle.turtlegopy.api.storage.SupportTicketStorageProvider;
 import com.turtle.turtlegopy.command.GopyCommand;
+import com.turtle.turtlegopy.discord.DiscordBotManager;
 import com.turtle.turtlegopy.gui.GUIListener;
 import com.turtle.turtlegopy.listener.ChatInputListener;
 import com.turtle.turtlegopy.listener.MendingRepairListener;
@@ -50,6 +51,7 @@ public class TurtleGopyCore {
     private BroadcastManager broadcastManager;
     private ChatInputListener chatInputListener;
     private SupportChatListener supportChatListener;
+    private DiscordBotManager discordBotManager;
     private FileConfiguration messagesConfig;
 
     public TurtleGopyCore(JavaPlugin plugin) {
@@ -70,6 +72,10 @@ public class TurtleGopyCore {
         broadcastManager = new BroadcastManager(this);
         chatInputListener = new ChatInputListener(this);
         supportChatListener = new SupportChatListener(this);
+
+        // Discord integration (JDA bot)
+        discordBotManager = new DiscordBotManager(this);
+        discordBotManager.start();
 
         plugin.getServer().getPluginManager().registerEvents(chatInputListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(supportChatListener, plugin);
@@ -104,6 +110,9 @@ public class TurtleGopyCore {
     }
 
     public void onDisable() {
+        if (discordBotManager != null) {
+            discordBotManager.shutdown();
+        }
         if (broadcastManager != null) {
             broadcastManager.stop();
         }
@@ -151,6 +160,13 @@ public class TurtleGopyCore {
         supportTicketManager = new SupportTicketManager(this);
         supportChatManager = new SupportChatManager(this);
         broadcastManager.reload();
+
+        // Reload Discord integration
+        if (discordBotManager != null) {
+            discordBotManager.shutdown();
+        }
+        discordBotManager = new DiscordBotManager(this);
+        discordBotManager.start();
     }
 
     private void initStorage() {

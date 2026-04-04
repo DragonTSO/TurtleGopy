@@ -41,6 +41,16 @@ public class FeedbackManager {
 
         notifyAdmins(player, content);
 
+        // Discord notification
+        core.getDiscordBotManager().sendFeedbackCreated(
+                feedback.getId().toString(),
+                feedback.getPlayerName(),
+                feedback.getPlayerUUID().toString(),
+                feedback.getContent(),
+                feedback.getStatus().name(),
+                feedback.getCreatedAt()
+        );
+
         return feedback;
     }
 
@@ -59,6 +69,9 @@ public class FeedbackManager {
                 player.sendMessage(message);
             }
         }
+
+        // Discord status update
+        core.getDiscordBotManager().sendFeedbackStatusUpdate(feedbackId.toString(), newStatus.name());
 
         if (newStatus == FeedbackStatus.ACCEPTED && !feedback.isRewardGiven()) {
             giveReward(feedback);

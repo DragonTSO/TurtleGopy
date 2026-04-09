@@ -127,6 +127,8 @@ public class PlayerGUI implements InventoryHolder, Listener {
 
         lore.add("§8────────────────────");
         lore.add("§7ID: §8" + feedback.getId().toString().substring(0, 8));
+        lore.add("");
+        lore.add("§3💬 Click để mở chat với admin");
 
         ItemStack item = new ItemStack(feedback.getStatus().getIcon());
         ItemMeta meta = item.getItemMeta();
@@ -203,6 +205,28 @@ public class PlayerGUI implements InventoryHolder, Listener {
             int totalPages = Math.max(1, (int) Math.ceil((double) feedbacks.size() / ITEMS_PER_PAGE));
             if (gui.page < totalPages - 1) {
                 open(core, player, gui.page + 1);
+            }
+            return;
+        }
+
+        // Handle clicking on a feedback item → open chat
+        int[] contentSlots = gui.getContentSlots();
+        int clickedIndex = -1;
+        for (int i = 0; i < contentSlots.length; i++) {
+            if (contentSlots[i] == slot) {
+                clickedIndex = i;
+                break;
+            }
+        }
+
+        if (clickedIndex >= 0) {
+            List<Feedback> feedbacks = core.getFeedbackManager().getPlayerFeedbacks(player.getUniqueId());
+            feedbacks.sort((a, b) -> Long.compare(b.getCreatedAt(), a.getCreatedAt()));
+            int actualIndex = gui.page * ITEMS_PER_PAGE + clickedIndex;
+            if (actualIndex < feedbacks.size()) {
+                Feedback feedback = feedbacks.get(actualIndex);
+                player.closeInventory();
+                core.getSupportChatManager().enterGenericChat(player, feedback.getId());
             }
         }
     }

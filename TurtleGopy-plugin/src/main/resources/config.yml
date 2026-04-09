@@ -44,23 +44,39 @@ chat-input:
 # Reward Settings - Góp Ý
 # ============================================
 # Phần thưởng khi góp ý được chấp nhận
+# Người chơi dùng /nhanthuong để chọn 1 trong 2 phần thưởng
 # Placeholders: {player} = tên người chơi, {feedback_id} = ID góp ý
 rewards:
   enabled: true
-  commands:
-    - "crates give {player} amethyst 1"
-    - "broadcast {player} đã nhận thưởng 1 key Amethyst vì góp ý được chấp nhận!"
+  option-a:
+    name: "&e1 Key Amethyst"
+    icon: AMETHYST_SHARD
+    commands:
+      - "crates give {player} amethyst 1"
+  option-b:
+    name: "&b5000 Xu"
+    icon: GOLD_INGOT
+    commands:
+      - "eco give {player} 5000"
 
 # ============================================
 # Reward Settings - Báo Lỗi
 # ============================================
 # Phần thưởng khi báo lỗi được xác nhận đã sửa
+# Người chơi dùng /nhanthuong để chọn 1 trong 2 phần thưởng
 # Placeholders: {player} = tên người chơi, {report_id} = ID báo lỗi
 bugreport-rewards:
   enabled: true
-  commands:
-    - "crates give {player} amethyst 1"
-    - "broadcast {player} đã nhận thưởng 1 key Amethyst vì báo lỗi hữu ích!"
+  option-a:
+    name: "&e1 Key Amethyst"
+    icon: AMETHYST_SHARD
+    commands:
+      - "crates give {player} amethyst 1"
+  option-b:
+    name: "&b5000 Xu"
+    icon: GOLD_INGOT
+    commands:
+      - "eco give {player} 5000"
 
 # ============================================
 # Reward Settings - Hỗ Trợ

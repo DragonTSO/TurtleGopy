@@ -106,15 +106,28 @@ public class FeedbackManager {
         return dateFormat.format(new Date(timestamp));
     }
 
-    private void giveReward(Feedback feedback) {
+    public List<Feedback> getPendingRewards(UUID playerUUID) {
+        List<Feedback> all = core.getStorageProvider().getByPlayer(playerUUID);
+        List<Feedback> pending = new java.util.ArrayList<>();
+        for (Feedback f : all) {
+            if (f.isRewardPending() && !f.isRewardGiven()) {
+                pending.add(f);
+            }
+        }
+        return pending;
+    }
+
+    public void claimReward(UUID feedbackId, String option) {
+        Feedback feedback = core.getStorageProvider().getById(feedbackId);
+        if (feedback == null || !feedback.isRewardPending() || feedback.isRewardGiven()) return;
+
         if (!core.getPlugin().getConfig().getBoolean("rewards.enabled", true)) return;
 
-        List<String> commands = core.getPlugin().getConfig().getStringList("rewards.commands");
+        List<String> commands = core.getPlugin().getConfig().getStringList("rewards." + option + ".commands");
         if (commands.isEmpty()) return;
 
         Player player = Bukkit.getPlayer(feedback.getPlayerUUID());
         if (player != null && player.isOnline()) {
-            // Use global scheduler for command dispatch (Folia-compatible)
             SchedulerUtil.runGlobalTask(core.getPlugin(), () -> {
                 for (String cmd : commands) {
                     String parsed = cmd.replace("{player}", player.getName())
@@ -124,12 +137,24 @@ public class FeedbackManager {
             });
 
             feedback.setRewardGiven(true);
+            feedback.setRewardPending(false);
             core.getStorageProvider().update(feedback);
 
-            player.sendMessage(core.getMessage("feedback-reward"));
-        } else {
-            feedback.setRewardGiven(false);
-            core.getStorageProvider().update(feedback);
+            player.sendMessage(core.getMessage("reward-claimed"));
+        }
+    }
+
+    private void giveReward(Feedback feedback) {
+        if (!core.getPlugin().getConfig().getBoolean("rewards.enabled", true)) return;
+
+        // Set reward as pending - player must claim via /nhanthuong
+        feedback.setRewardPending(true);
+        feedback.setRewardGiven(false);
+        core.getStorageProvider().update(feedback);
+
+        Player player = Bukkit.getPlayer(feedback.getPlayerUUID());
+        if (player != null && player.isOnline()) {
+            player.sendMessage(core.getMessage("reward-pending"));
         }
     }
 

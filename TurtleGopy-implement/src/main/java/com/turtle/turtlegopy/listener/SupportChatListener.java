@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class SupportChatListener implements Listener {
@@ -57,11 +58,14 @@ public class SupportChatListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onGlobalChat(AsyncPlayerChatEvent event) {
-        // If the sender is in support chat, LOWEST handler already cancelled it,
-        // and ignoreCancelled = true means we won't reach here. So this only
-        // fires for normal global chat from non-support-chat players.
         event.getRecipients().removeIf(recipient ->
                 core.getSupportChatManager().isInChat(recipient.getUniqueId()));
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        // Notify player of unread staff replies
+        core.getSupportChatManager().onPlayerJoin(event.getPlayer().getUniqueId());
     }
 
     @EventHandler

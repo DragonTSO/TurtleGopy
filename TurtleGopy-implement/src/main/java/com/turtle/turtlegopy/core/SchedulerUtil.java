@@ -78,6 +78,17 @@ public class SchedulerUtil {
     }
 
     /**
+     * Run a repeating task on the global region.
+     */
+    public static void runGlobalTaskTimer(JavaPlugin plugin, Runnable task, long delayTicks, long periodTicks) {
+        if (isFolia) {
+            Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, scheduledTask -> task.run(), delayTicks, periodTicks);
+        } else {
+            Bukkit.getScheduler().runTaskTimer(plugin, task, delayTicks, periodTicks);
+        }
+    }
+
+    /**
      * Cancel a scheduled task by taskId. Only works on non-Folia.
      * On Folia, use the ScheduledTask object directly.
      */

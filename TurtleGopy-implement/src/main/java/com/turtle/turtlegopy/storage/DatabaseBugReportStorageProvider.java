@@ -47,7 +47,8 @@ public class DatabaseBugReportStorageProvider implements BugReportStorageProvide
                 "status VARCHAR(20) NOT NULL DEFAULT 'PENDING', " +
                 "created_at BIGINT NOT NULL, " +
                 "admin_note TEXT DEFAULT '', " +
-                "reward_given BOOLEAN DEFAULT FALSE" +
+                "reward_given BOOLEAN DEFAULT FALSE, " +
+                "reward_pending BOOLEAN DEFAULT FALSE" +
                 ")";
 
         try (Connection conn = dataSource.getConnection();
@@ -61,8 +62,8 @@ public class DatabaseBugReportStorageProvider implements BugReportStorageProvide
     @Override
     public void save(BugReport report) {
         String sql = "INSERT INTO " + tablePrefix + "bugreports " +
-                "(id, player_uuid, player_name, content, status, created_at, admin_note, reward_given) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "(id, player_uuid, player_name, content, status, created_at, admin_note, reward_given, reward_pending) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -74,6 +75,7 @@ public class DatabaseBugReportStorageProvider implements BugReportStorageProvide
             stmt.setLong(6, report.getCreatedAt());
             stmt.setString(7, report.getAdminNote());
             stmt.setBoolean(8, report.isRewardGiven());
+            stmt.setBoolean(9, report.isRewardPending());
             stmt.executeUpdate();
         } catch (SQLException e) {
             core.getPlugin().getLogger().severe("Lỗi lưu bug report: " + e.getMessage());
@@ -83,14 +85,15 @@ public class DatabaseBugReportStorageProvider implements BugReportStorageProvide
     @Override
     public void update(BugReport report) {
         String sql = "UPDATE " + tablePrefix + "bugreports SET " +
-                "status = ?, admin_note = ?, reward_given = ? WHERE id = ?";
+                "status = ?, admin_note = ?, reward_given = ?, reward_pending = ? WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, report.getStatus().name());
             stmt.setString(2, report.getAdminNote());
             stmt.setBoolean(3, report.isRewardGiven());
-            stmt.setString(4, report.getId().toString());
+            stmt.setBoolean(4, report.isRewardPending());
+            stmt.setString(5, report.getId().toString());
             stmt.executeUpdate();
         } catch (SQLException e) {
             core.getPlugin().getLogger().severe("Lỗi cập nhật bug report: " + e.getMessage());
@@ -175,6 +178,7 @@ public class DatabaseBugReportStorageProvider implements BugReportStorageProvide
                 .createdAt(rs.getLong("created_at"))
                 .adminNote(rs.getString("admin_note"))
                 .rewardGiven(rs.getBoolean("reward_given"))
+                .rewardPending(rs.getBoolean("reward_pending"))
                 .build();
     }
 }

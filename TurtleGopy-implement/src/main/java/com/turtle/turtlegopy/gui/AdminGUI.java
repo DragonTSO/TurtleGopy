@@ -29,17 +29,25 @@ public class AdminGUI implements InventoryHolder {
     private final Player admin;
     private final int page;
     private final FeedbackStatus filterStatus;
+    private final String playerFilter;
     private List<Feedback> currentFeedbacks;
 
     public AdminGUI(TurtleGopyCore core, Player admin, int page, FeedbackStatus filterStatus) {
+        this(core, admin, page, filterStatus, null);
+    }
+
+    public AdminGUI(TurtleGopyCore core, Player admin, int page, FeedbackStatus filterStatus, String playerFilter) {
         this.core = core;
         this.admin = admin;
         this.page = page;
         this.filterStatus = filterStatus;
+        this.playerFilter = playerFilter;
 
         String title = core.colorize(
-                core.getPlugin().getConfig().getString("gui.admin.title", "&c&l⚙ Quản Lý Góp Ý"));
-        if (filterStatus != null) {
+                core.getPlugin().getConfig().getString("gui.admin.title", "&6&l✉ Quản Lý Góp Ý"));
+        if (playerFilter != null) {
+            title += " §7[§f" + playerFilter + "§7]";
+        } else if (filterStatus != null) {
             title += " §7[" + filterStatus.getDisplayName() + "§7]";
         }
         this.inventory = Bukkit.createInventory(this, SIZE, title);
@@ -48,7 +56,11 @@ public class AdminGUI implements InventoryHolder {
     }
 
     public static void open(TurtleGopyCore core, Player admin, int page, FeedbackStatus filter) {
-        AdminGUI gui = new AdminGUI(core, admin, page, filter);
+        open(core, admin, page, filter, null);
+    }
+
+    public static void open(TurtleGopyCore core, Player admin, int page, FeedbackStatus filter, String playerFilter) {
+        AdminGUI gui = new AdminGUI(core, admin, page, filter, playerFilter);
         admin.openInventory(gui.getInventory());
     }
 
@@ -57,12 +69,14 @@ public class AdminGUI implements InventoryHolder {
 
         List<Feedback> allFeedbacks = core.getFeedbackManager().getAllFeedbacks();
 
+        currentFeedbacks = new ArrayList<>(allFeedbacks);
+
+        if (playerFilter != null && !playerFilter.isEmpty()) {
+            currentFeedbacks.removeIf(f -> !f.getPlayerName().equalsIgnoreCase(playerFilter));
+        }
+
         if (filterStatus != null) {
-            currentFeedbacks = allFeedbacks.stream()
-                    .filter(f -> f.getStatus() == filterStatus)
-                    .collect(Collectors.toList());
-        } else {
-            currentFeedbacks = new ArrayList<>(allFeedbacks);
+            currentFeedbacks.removeIf(f -> f.getStatus() != filterStatus);
         }
 
         currentFeedbacks.sort((a, b) -> Long.compare(b.getCreatedAt(), a.getCreatedAt()));
@@ -175,25 +189,25 @@ public class AdminGUI implements InventoryHolder {
             if (statusIndex < statuses.length) {
                 FeedbackStatus clickedStatus = statuses[statusIndex];
                 FeedbackStatus newFilter = (gui.filterStatus == clickedStatus) ? null : clickedStatus;
-                open(core, admin, 0, newFilter);
+                open(core, admin, 0, newFilter, gui.playerFilter);
             }
             return;
         }
 
         if (slot == 49) {
-            open(core, admin, 0, null);
+            open(core, admin, 0, null, gui.playerFilter);
             return;
         }
 
         if (slot == 50 && gui.page > 0) {
-            open(core, admin, gui.page - 1, gui.filterStatus);
+            open(core, admin, gui.page - 1, gui.filterStatus, gui.playerFilter);
             return;
         }
 
         if (slot == 53) {
             int totalPages = Math.max(1, (int) Math.ceil((double) gui.currentFeedbacks.size() / ITEMS_PER_PAGE));
             if (gui.page < totalPages - 1) {
-                open(core, admin, gui.page + 1, gui.filterStatus);
+                open(core, admin, gui.page + 1, gui.filterStatus, gui.playerFilter);
             }
             return;
         }

@@ -12,6 +12,7 @@ import com.turtle.turtlegopy.gui.PlayerBugReportGUI;
 import com.turtle.turtlegopy.gui.PlayerGUI;
 import com.turtle.turtlegopy.gui.PlayerSupportGUI;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -77,13 +78,15 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                // /baoloi check → admin bug report, /hotro check → admin support, /gopy check → admin feedback
+                String playerFilter = args.length >= 2 ? args[1] : null;
+
+                // /baoloi check [player] → admin bug report, /hotro check [player] → admin support, /gopy check [player] → admin feedback
                 if (isBaoLoi) {
-                    AdminBugReportGUI.open(core, player, 0, null);
+                    AdminBugReportGUI.open(core, player, 0, null, playerFilter);
                 } else if (isHoTro) {
-                    AdminSupportGUI.open(core, player, 0, null);
+                    AdminSupportGUI.open(core, player, 0, null, playerFilter);
                 } else {
-                    AdminGUI.open(core, player, 0, null);
+                    AdminGUI.open(core, player, 0, null, playerFilter);
                 }
             }
 
@@ -174,6 +177,18 @@ public class GopyCommand implements CommandExecutor, TabCompleter {
             String input = args[0].toLowerCase();
             completions.removeIf(s -> !s.startsWith(input));
             return completions;
+        }
+
+        // Tab complete player names for /check <player>
+        if (args.length == 2 && args[0].equalsIgnoreCase("check") && sender.hasPermission("turtlegopy.admin")) {
+            String input = args[1].toLowerCase();
+            List<String> players = new ArrayList<>();
+            for (Player online : Bukkit.getOnlinePlayers()) {
+                if (online.getName().toLowerCase().startsWith(input)) {
+                    players.add(online.getName());
+                }
+            }
+            return players;
         }
 
         return Collections.emptyList();

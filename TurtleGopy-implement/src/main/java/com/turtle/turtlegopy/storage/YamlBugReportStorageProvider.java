@@ -59,6 +59,7 @@ public class YamlBugReportStorageProvider implements BugReportStorageProvider {
         dataConfig.set(path + ".created-at", report.getCreatedAt());
         dataConfig.set(path + ".admin-note", report.getAdminNote());
         dataConfig.set(path + ".reward-given", report.isRewardGiven());
+        dataConfig.set(path + ".reward-pending", report.isRewardPending());
         saveData();
     }
 
@@ -133,6 +134,7 @@ public class YamlBugReportStorageProvider implements BugReportStorageProvider {
                     .createdAt(section.getLong("created-at", System.currentTimeMillis()))
                     .adminNote(section.getString("admin-note", ""))
                     .rewardGiven(section.getBoolean("reward-given", false))
+                    .rewardPending(section.getBoolean("reward-pending", false))
                     .build();
         } catch (Exception e) {
             core.getPlugin().getLogger().warning("Lỗi khi tải bug report " + id + ": " + e.getMessage());

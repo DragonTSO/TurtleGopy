@@ -12,6 +12,9 @@ feedback-input-cancelled: "&cBạn đã hủy góp ý."
 feedback-input-timeout: "&cHết thời gian nhập góp ý."
 feedback-status-changed: "&aGóp ý của bạn đã được cập nhật: &e{status}"
 feedback-reward: "&a🎁 Bạn đã nhận thưởng vì góp ý được chấp nhận!"
+reward-pending: "&a🎁 Bạn có phần thưởng chờ nhận! Gõ &e/nhanthuong &ađể chọn quà!"
+reward-claimed: "&a🎁 Bạn đã nhận thưởng thành công!"
+reward-no-pending: "&eBạn không có phần thưởng nào đang chờ."
 feedback-deleted: "&cGóp ý đã bị xóa."
 feedback-empty: "&eBạn chưa có góp ý nào."
 
@@ -68,6 +71,8 @@ support-chat-no-history: "&7  Chưa có tin nhắn nào. Hãy bắt đầu cuộ
 support-chat-role-player: "&a[Người chơi]"
 support-chat-role-staff: "&c[Staff]"
 support-chat-notify-new: "&3🎫 {player} đã gửi tin nhắn trong phiếu hỗ trợ &e#{id}"
+staff-reply-reminder: "&e💬 Staff đã trả lời phiếu {type} &6#{id}&e! Vào xem góp ý/báo lỗi/hỗ trợ để đọc."
+reward-pending-reminder: "&a🎁 Bạn có &e{count} &aphần thưởng chưa nhận! Gõ &e/nhanthuong &ađể nhận."
 
 # ============================================
 # Mending Repair - Sửa đồ bằng XP

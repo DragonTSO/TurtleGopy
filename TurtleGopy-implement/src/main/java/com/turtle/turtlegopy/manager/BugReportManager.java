@@ -106,15 +106,28 @@ public class BugReportManager {
         return dateFormat.format(new Date(timestamp));
     }
 
-    private void giveReward(BugReport report) {
+    public List<BugReport> getPendingRewards(UUID playerUUID) {
+        List<BugReport> all = core.getBugReportStorageProvider().getByPlayer(playerUUID);
+        List<BugReport> pending = new java.util.ArrayList<>();
+        for (BugReport r : all) {
+            if (r.isRewardPending() && !r.isRewardGiven()) {
+                pending.add(r);
+            }
+        }
+        return pending;
+    }
+
+    public void claimReward(UUID reportId, String option) {
+        BugReport report = core.getBugReportStorageProvider().getById(reportId);
+        if (report == null || !report.isRewardPending() || report.isRewardGiven()) return;
+
         if (!core.getPlugin().getConfig().getBoolean("bugreport-rewards.enabled", true)) return;
 
-        List<String> commands = core.getPlugin().getConfig().getStringList("bugreport-rewards.commands");
+        List<String> commands = core.getPlugin().getConfig().getStringList("bugreport-rewards." + option + ".commands");
         if (commands.isEmpty()) return;
 
         Player player = Bukkit.getPlayer(report.getPlayerUUID());
         if (player != null && player.isOnline()) {
-            // Use global scheduler for command dispatch (Folia-compatible)
             SchedulerUtil.runGlobalTask(core.getPlugin(), () -> {
                 for (String cmd : commands) {
                     String parsed = cmd.replace("{player}", player.getName())
@@ -124,12 +137,24 @@ public class BugReportManager {
             });
 
             report.setRewardGiven(true);
+            report.setRewardPending(false);
             core.getBugReportStorageProvider().update(report);
 
-            player.sendMessage(core.getMessage("bugreport-reward"));
-        } else {
-            report.setRewardGiven(false);
-            core.getBugReportStorageProvider().update(report);
+            player.sendMessage(core.getMessage("reward-claimed"));
+        }
+    }
+
+    private void giveReward(BugReport report) {
+        if (!core.getPlugin().getConfig().getBoolean("bugreport-rewards.enabled", true)) return;
+
+        // Set reward as pending - player must claim via /nhanthuong
+        report.setRewardPending(true);
+        report.setRewardGiven(false);
+        core.getBugReportStorageProvider().update(report);
+
+        Player player = Bukkit.getPlayer(report.getPlayerUUID());
+        if (player != null && player.isOnline()) {
+            player.sendMessage(core.getMessage("reward-pending"));
         }
     }
 

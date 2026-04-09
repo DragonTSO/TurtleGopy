@@ -21,4 +21,5 @@ public class BugReport {
     private long createdAt;
     private String adminNote;
     private boolean rewardGiven;
+    private boolean rewardPending;
 }

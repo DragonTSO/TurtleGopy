@@ -59,6 +59,7 @@ public class YamlStorageProvider implements StorageProvider {
         dataConfig.set(path + ".created-at", feedback.getCreatedAt());
         dataConfig.set(path + ".admin-note", feedback.getAdminNote());
         dataConfig.set(path + ".reward-given", feedback.isRewardGiven());
+        dataConfig.set(path + ".reward-pending", feedback.isRewardPending());
         saveData();
     }
 
@@ -133,6 +134,7 @@ public class YamlStorageProvider implements StorageProvider {
                     .createdAt(section.getLong("created-at", System.currentTimeMillis()))
                     .adminNote(section.getString("admin-note", ""))
                     .rewardGiven(section.getBoolean("reward-given", false))
+                    .rewardPending(section.getBoolean("reward-pending", false))
                     .build();
         } catch (Exception e) {
             core.getPlugin().getLogger().warning("Lỗi khi tải feedback " + id + ": " + e.getMessage());

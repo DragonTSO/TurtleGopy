@@ -16,6 +16,9 @@ commands:
   hotro:
     description: Mở menu hỗ trợ
     usage: /hotro [check|<nội dung>]
+  nhanthuong:
+    description: Mở menu nhận phần thưởng
+    usage: /nhanthuong
 
 permissions:
   turtlegopy.admin:

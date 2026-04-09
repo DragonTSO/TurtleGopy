@@ -5,6 +5,7 @@ import com.turtle.turtlegopy.api.storage.StorageProvider;
 import com.turtle.turtlegopy.api.storage.SupportChatStorageProvider;
 import com.turtle.turtlegopy.api.storage.SupportTicketStorageProvider;
 import com.turtle.turtlegopy.command.GopyCommand;
+import com.turtle.turtlegopy.command.NhanThuongCommand;
 import com.turtle.turtlegopy.discord.DiscordBotManager;
 import com.turtle.turtlegopy.gui.GUIListener;
 import com.turtle.turtlegopy.listener.ChatInputListener;
@@ -103,8 +104,19 @@ public class TurtleGopyCore {
             hotroCmd.setTabCompleter(gopyCommand);
         }
 
+        // Register /nhanthuong command
+        NhanThuongCommand nhanThuongCommand = new NhanThuongCommand(this);
+        PluginCommand nhanThuongCmd = plugin.getCommand("nhanthuong");
+        if (nhanThuongCmd != null) {
+            nhanThuongCmd.setExecutor(nhanThuongCommand);
+            nhanThuongCmd.setTabCompleter(nhanThuongCommand);
+        }
+
         // Start broadcast manager
         broadcastManager.start();
+
+        // Start staff reply notification task (every 3 minutes)
+        supportChatManager.startNotificationTask();
 
         plugin.getLogger().info("TurtleGopy đã được kích hoạt!");
     }

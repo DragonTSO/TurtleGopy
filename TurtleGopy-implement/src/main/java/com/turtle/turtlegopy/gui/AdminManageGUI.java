@@ -114,6 +114,15 @@ public class AdminManageGUI implements InventoryHolder {
                         feedback.getStatus() == FeedbackStatus.IMPLEMENTED ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
         inventory.setItem(14, implBtn);
 
+        // Open Chat button
+        ItemStack chatBtn = createItem(Material.NAME_TAG,
+                "§3§l💬 Mở Chat",
+                List.of("§7Vào luồng chat riêng với người chơi",
+                        "§7Để trao đổi về góp ý này",
+                        "",
+                        "§e➤ Click để mở chat"));
+        inventory.setItem(15, chatBtn);
+
         // Delete
         ItemStack deleteBtn = createItem(Material.TNT,
                 "§4§lXóa Góp Ý",
@@ -171,6 +180,11 @@ public class AdminManageGUI implements InventoryHolder {
                 admin.sendMessage(core.getMessage("admin-status-updated")
                         .replace("{status}", FeedbackStatus.IMPLEMENTED.getDisplayName()));
                 open(core, admin, gui.feedbackId);
+            }
+            case 15 -> {
+                // Open Chat
+                admin.closeInventory();
+                core.getSupportChatManager().enterGenericChat(admin, gui.feedbackId);
             }
             case 16 -> {
                 // Delete

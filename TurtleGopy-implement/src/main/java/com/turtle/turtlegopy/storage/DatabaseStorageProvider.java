@@ -85,7 +85,8 @@ public class DatabaseStorageProvider implements StorageProvider {
                 "status VARCHAR(20) NOT NULL DEFAULT 'PENDING', " +
                 "created_at BIGINT NOT NULL, " +
                 "admin_note TEXT DEFAULT '', " +
-                "reward_given BOOLEAN DEFAULT FALSE" +
+                "reward_given BOOLEAN DEFAULT FALSE, " +
+                "reward_pending BOOLEAN DEFAULT FALSE" +
                 ")";
 
         try (Connection conn = dataSource.getConnection();
@@ -99,8 +100,8 @@ public class DatabaseStorageProvider implements StorageProvider {
     @Override
     public void save(Feedback feedback) {
         String sql = "INSERT INTO " + tablePrefix + "feedbacks " +
-                "(id, player_uuid, player_name, content, status, created_at, admin_note, reward_given) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "(id, player_uuid, player_name, content, status, created_at, admin_note, reward_given, reward_pending) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -112,6 +113,7 @@ public class DatabaseStorageProvider implements StorageProvider {
             stmt.setLong(6, feedback.getCreatedAt());
             stmt.setString(7, feedback.getAdminNote());
             stmt.setBoolean(8, feedback.isRewardGiven());
+            stmt.setBoolean(9, feedback.isRewardPending());
             stmt.executeUpdate();
         } catch (SQLException e) {
             core.getPlugin().getLogger().severe("Lỗi lưu feedback: " + e.getMessage());
@@ -121,14 +123,15 @@ public class DatabaseStorageProvider implements StorageProvider {
     @Override
     public void update(Feedback feedback) {
         String sql = "UPDATE " + tablePrefix + "feedbacks SET " +
-                "status = ?, admin_note = ?, reward_given = ? WHERE id = ?";
+                "status = ?, admin_note = ?, reward_given = ?, reward_pending = ? WHERE id = ?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, feedback.getStatus().name());
             stmt.setString(2, feedback.getAdminNote());
             stmt.setBoolean(3, feedback.isRewardGiven());
-            stmt.setString(4, feedback.getId().toString());
+            stmt.setBoolean(4, feedback.isRewardPending());
+            stmt.setString(5, feedback.getId().toString());
             stmt.executeUpdate();
         } catch (SQLException e) {
             core.getPlugin().getLogger().severe("Lỗi cập nhật feedback: " + e.getMessage());
@@ -213,6 +216,7 @@ public class DatabaseStorageProvider implements StorageProvider {
                 .createdAt(rs.getLong("created_at"))
                 .adminNote(rs.getString("admin_note"))
                 .rewardGiven(rs.getBoolean("reward_given"))
+                .rewardPending(rs.getBoolean("reward_pending"))
                 .build();
     }
 }

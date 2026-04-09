@@ -107,6 +107,15 @@ public class AdminBugManageGUI implements InventoryHolder {
                         report.getStatus() == BugReportStatus.REJECTED ? "§a➤ Đang ở trạng thái này" : "§e➤ Click để chọn"));
         inventory.setItem(14, rejectBtn);
 
+        // Open Chat button
+        ItemStack chatBtn = createItem(Material.NAME_TAG,
+                "§3§l💬 Mở Chat",
+                List.of("§7Vào luồng chat riêng với người chơi",
+                        "§7Để trao đổi về báo lỗi này",
+                        "",
+                        "§e➤ Click để mở chat"));
+        inventory.setItem(15, chatBtn);
+
         ItemStack deleteBtn = createItem(Material.TNT,
                 "§4§lXóa Báo Lỗi",
                 List.of("§c⚠ Hành động này không thể hoàn tác!",
@@ -157,6 +166,11 @@ public class AdminBugManageGUI implements InventoryHolder {
                 admin.sendMessage(core.getMessage("admin-bugreport-status-updated")
                         .replace("{status}", BugReportStatus.REJECTED.getDisplayName()));
                 open(core, admin, gui.reportId);
+            }
+            case 15 -> {
+                // Open Chat
+                admin.closeInventory();
+                core.getSupportChatManager().enterGenericChat(admin, gui.reportId);
             }
             case 16 -> {
                 core.getBugReportManager().deleteReport(gui.reportId);

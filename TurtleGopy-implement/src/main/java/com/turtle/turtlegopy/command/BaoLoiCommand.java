@@ -8,6 +8,7 @@ import com.turtle.turtlegopy.core.TurtleGopyCore;
 import com.turtle.turtlegopy.gui.AdminBugReportGUI;
 import com.turtle.turtlegopy.gui.PlayerBugReportGUI;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -53,7 +54,7 @@ public class BaoLoiCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                AdminBugReportGUI.open(core, player, 0, null);
+                AdminBugReportGUI.open(core, player, 0, null, args.length >= 2 ? args[1] : null);
             }
 
             default -> {
@@ -84,6 +85,17 @@ public class BaoLoiCommand implements CommandExecutor, TabCompleter {
             String input = args[0].toLowerCase();
             completions.removeIf(s -> !s.startsWith(input));
             return completions;
+        }
+
+        if (args.length == 2 && args[0].equalsIgnoreCase("check") && sender.hasPermission("turtlegopy.admin")) {
+            String input = args[1].toLowerCase();
+            List<String> players = new ArrayList<>();
+            for (Player online : Bukkit.getOnlinePlayers()) {
+                if (online.getName().toLowerCase().startsWith(input)) {
+                    players.add(online.getName());
+                }
+            }
+            return players;
         }
 
         return Collections.emptyList();
